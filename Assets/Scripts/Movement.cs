@@ -42,7 +42,7 @@ public class Movement : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            Time.timeScale = 0.0f;
+            Time.timeScale = 0.75f;
             currentProjectile = EnhancedProjectilePrefab;
         }
 

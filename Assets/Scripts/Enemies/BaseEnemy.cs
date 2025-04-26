@@ -1,13 +1,17 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Enemies
 {
     public class BaseEnemy : MonoBehaviour, IShootable
     {
+        [SerializeField] private int score = 1;
         [SerializeField] private int health = 100;
         [SerializeField] private float speed = 5f;      // Movement speed
         [SerializeField] private float rotateSpeed = 20f; // Optional: rotation speed
+        [SerializeField] private Slider healthBar;
+        private GameManager gameManager;
 
         public string playerTag = "Player"; // Make sure the player has this tag
         private Transform player;
@@ -20,9 +24,16 @@ namespace Enemies
         public void Damage(float damageTaken)
         {
             health -= (int)damageTaken;
+            
+            if (healthBar != null)
+            {
+                healthBar.value = health;
+            }
+
             if (health <= 0)
             {
                 Destroy(gameObject);
+                gameManager.AddScore(score);
             }
         }
 
@@ -33,6 +44,14 @@ namespace Enemies
             {
                 player = playerObj.transform;
             }
+
+            gameManager = FindAnyObjectByType<GameManager>();
+
+            if (healthBar != null)
+            {
+                healthBar.maxValue = health;
+                healthBar.value = health;
+            }
         }
         
         private void Update()
@@ -42,10 +61,6 @@ namespace Enemies
             // Move towards the player
             Vector3 direction = (player.transform.position - transform.position).normalized;
             transform.position += direction * (speed * Time.deltaTime);
-            
-            float currentRotation = transform.localRotation.eulerAngles.z;
-            transform.localRotation = Quaternion.Euler(new Vector3(0, 0, currentRotation - rotateSpeed));
-
         }
     }
 }
