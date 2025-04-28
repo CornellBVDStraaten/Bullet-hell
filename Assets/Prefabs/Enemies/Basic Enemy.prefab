@@ -105,7 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 1
-  health: 100
+  health: 25
   speed: 5
   rotateSpeed: 1
   healthBar: {fileID: 8032981255250166807}

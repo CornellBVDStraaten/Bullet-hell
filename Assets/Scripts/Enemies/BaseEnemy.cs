@@ -11,15 +11,8 @@ namespace Enemies
         [SerializeField] private float speed = 5f;      // Movement speed
         [SerializeField] private float rotateSpeed = 20f; // Optional: rotation speed
         [SerializeField] private Slider healthBar;
-        private GameManager gameManager;
-
-        public string playerTag = "Player"; // Make sure the player has this tag
+        public string playerTag = "Player";
         private Transform player;
-        
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            Debug.Log($"Collision detected with {collision.gameObject.name}");
-        }
         
         public void Damage(float damageTaken)
         {
@@ -33,7 +26,7 @@ namespace Enemies
             if (health <= 0)
             {
                 Destroy(gameObject);
-                gameManager.AddScore(score);
+                GameManager.Instance.AddScore(score);
             }
         }
 
@@ -44,8 +37,6 @@ namespace Enemies
             {
                 player = playerObj.transform;
             }
-
-            gameManager = FindAnyObjectByType<GameManager>();
 
             if (healthBar != null)
             {
@@ -61,6 +52,18 @@ namespace Enemies
             // Move towards the player
             Vector3 direction = (player.transform.position - transform.position).normalized;
             transform.position += direction * (speed * Time.deltaTime);
+        }
+
+        // Enables setting max health of enemy higher
+        public void BoostHealth(int amount)
+        {
+            health += amount;
+
+            if (healthBar != null)
+            {
+                healthBar.maxValue = health;
+                healthBar.value = health;
+            }
         }
     }
 }
